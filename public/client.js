@@ -1,3 +1,13 @@
+
+
+var socket = io(url)
+socket.on("connect",function(){
+    console.log("connected");
+});
+
+
+
+
 function signup() {
     
     axios({
@@ -123,4 +133,140 @@ function forget_password_step_2() {
         console.log(error);
     });
     return false;
+}
+function getProfile(){
+    axios({
+        method:'get',
+        url:'http://localhost:3000/profile',
+        credentials:'include',
+    }).then((response)=>{
+        document.getElementById("pName").innerHTML=response.data.profile.name
+    },(error)=>{
+        location.href = "./login.html"
+    });
+    return false;
+}
+function post() {
+    axios({
+        method: 'post',
+        url: 'http://localhost:3000//tweet',
+        credentials: 'include',
+        data: {
+            userName: document.getElementById('pName').innerHTML,
+            tweet: document.getElementById('tweet').value,
+        },
+    }).then((response) => {
+        console.log(response.data.data);
+        document.getElementById('userPosts').innerHTML += `
+    <div class="posts">
+    <h4>${response.data.data.name}</h4>
+    
+    <p>${response.data.data.tweets}</p>
+    </div>
+    `
+    }, (error) => {
+        console.log(error.message);
+    });
+    document.getElementById('tweet').value = "";
+    return false
+}
+
+function getTweets() {
+    axios({
+        method: 'get',
+        url: 'http://localhost:3000/getTweets',
+        credentials: 'include',
+    }).then((response) => {
+        let tweets = response.data;
+        let html = ""
+        tweets.forEach(element => {
+            html += `
+            <div class="posts">
+            <h4>${element.name}</h4>
+            
+            <p class="noteCard">${element.tweets}</p>
+            </div>
+            `
+        });
+        document.getElementById('posts').innerHTML = html;
+
+        let userTweet = response.data
+        let userHtml = ""
+        let userName = document.getElementById('pName').innerHTML;
+        userTweet.forEach(element => {
+            if (element.name == userName) {
+                userHtml += `
+                <div class="posts">
+                <h4>${element.name}</h4>
+            
+                <p class="noteCard">${element.tweets}</p>
+                </div>
+                `
+            }
+        });
+        document.getElementById('userPosts').innerHTML = userHtml;
+    }, (error) => {
+        console.log(error.message);
+    });
+    return false
+}
+
+function getUsers() {
+    axios({
+        method: 'get',
+        url: url + '/getUsers',
+        credentials: 'include',
+    }).then((response) => {
+        let users = response.data;
+        let usersHtml = ""
+        users.forEach(element => {
+            usersHtml += `
+            <div class="posts">
+            <h4>${element.name}</h4>
+            <p>${element.phone}</p>
+            <p class="noteCard">${element.email}</p>
+            </div>
+            `
+        });
+        document.getElementById('users').innerHTML = usersHtml;
+
+    }, (error) => {
+        console.log(error.message);
+    });
+    return false
+}
+
+
+socket.on('NEW_POST', (newPost) => {
+    console.log(newPost)
+    let tweets = newPost;
+    document.getElementById('posts').innerHTML += `
+    <div class="posts">
+    <h4>${tweets.name}</h4>
+    <p>${tweets.tweets}</p>
+    </div>
+    `
+})
+document.getElementById('profile').style.display = "none"
+document.getElementById('usersSection').style.display = "none"
+function showHome() {
+    document.getElementById('profile').style.display = "none"
+    document.getElementById('home').style.display = "block"
+    document.getElementById('usersSection').style.display = "none"
+
+}
+
+
+function showProfile() {
+    document.getElementById('home').style.display = "none"
+    document.getElementById('profile').style.display = "block"
+    document.getElementById('usersSection').style.display = "none"
+
+}
+
+function showUsers() {
+    document.getElementById('home').style.display = "none"
+    document.getElementById('profile').style.display = "none"
+    document.getElementById('usersSection').style.display = "block"
+
 }

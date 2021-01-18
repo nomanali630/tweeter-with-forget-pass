@@ -8,8 +8,14 @@ var path = require("path")
 var { userModel , tweetModel } = require("./dbrepo/models");
 var authRoutes = require("./routes/auth");
 var { SERVER_SECRET } = require("./core/index");
-const { resolve } = require("path");
+var http = require("http");
+var socketIO = require("socket.io");
+var server = http.createServer(app);
+var io = socketIO(server);
 
+io.on("connection",()=>{
+    console.log("its running");
+})
 
 console.log("module: ", userModel);
 
@@ -86,11 +92,55 @@ app.get("/profile", (req, res, next) => {
         })
 
         
-})
+});
 
-
+app.post("/tweet",function(req,res,next){
+    if (!req.body.name && !req.body.tweet) {
+        res.status(403).send(`
+            please send body in json body
+        {
+            "tweet":"tweet"
+            "name":"noman"
+        }`)
+        return;
+    }
+    var newTweet = new tweetModel({
+        "name":req.body.name,
+        "tweets":req.body.tweet
+    });
+    newTweet.save(function(err,data){
+        if(data){
+            res.status(200).send({
+                message:"tweet created",
+                data:data
+            })
+            console.log(data.tweets)
+            io.emit("NEW_POST", data)
+        }else{
+            console.log(err)
+            res.status.send({
+                message: "user created err : " + err
+            })
+        }
+    })
+});
+app.get("/getTweets",function(req,res,next){
+    tweetModel.find({},function(err,data){
+        if(data){
+            res.send({
+                message:"tweet created" , 
+                data:data ,
+                status:200
+                
+            })
+        }else{
+            console.log(err)
+            res.send(err)
+        }
+    });
+});
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log("server is running on: ", PORT);
 })

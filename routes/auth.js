@@ -258,37 +258,7 @@ api.post("/forget_password_step_2", function (req, res, next) {
         });
 });
 
-api.post("/tweet",function(req,res,next){
-    if (!req.body.name && !req.body.tweet) {
-        res.status(403).send(`
-            please send body in json body
-        {
-            "tweet":"tweet"
-            "name":"noman"
-        }`)
-        return;
-    }
-    var newTweet = new tweetModel({
-        "name":req.body.name,
-        "tweets":req.body.tweet
-    });
-    newTweet.save(function(err,doc){
-        if(doc){
-            res.status(200).send({
-                message:"tweet created",
-                doc:doc
-            })
-        }else{
-            console.log(err)
-            res.status.send({
-                message: "user created err : " + err
-            })
-        }
-    })
-});
-api.get("/tweet",function(req,res,next){
-    
-})
+
 module.exports = api;
 
 
