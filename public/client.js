@@ -1,4 +1,4 @@
-var url = "https://tweet-with-forget-pass.herokuapp.com/"
+var url = "https://tweet-with-forget-pass.herokuapp.com"
 // var url = "https://localhost:5000"
 var socket = io(url)
 
