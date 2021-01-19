@@ -1,5 +1,7 @@
+var url = "https://tweet-with-forget-pass.herokuapp.com/"
+// var url = "https://localhost:5000"
+var socket = io(url)
 
-var socket = io("http://localhost:5000")
 socket.on("connect", function () {
     console.log("connected");
 });
@@ -7,8 +9,8 @@ function signup() {
 
     axios({
         method: 'post',
-        url: 'http://localhost:5000/signup',
-        // url: 'https://forgetpasswordserver.herokuapp.com/signup',
+        url: url+'/signup',
+        
         data: {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
@@ -34,8 +36,8 @@ function signup() {
 function login() {
     axios({
         method: 'post',
-        url: 'http://localhost:5000/login',
-        // url: 'https://forgetpasswordserver.herokuapp.com/login',
+        url: url+'/login',
+       
         withCredentials: true,
         data: {
 
@@ -59,7 +61,7 @@ function login() {
 function logout() {
     axios({
         method: 'post',
-        url: 'http://localhost:5000/logout',
+        url: url+'/logout',
     }).then((response) => {
         console.log(response);
         location.href = "./login.html"
@@ -75,8 +77,8 @@ function forget_password() {
 
     axios({
         method: 'post',
-        url: 'http://localhost:5000/forget_password',
-        // url: 'https://forgetpasswordserver.herokuapp.com/login',
+        url: url+'/forget_password',
+        
         withCredentials: true,
         data: {
             email: email
@@ -97,8 +99,8 @@ function forget_password_step_2() {
     var email22 = localStorage.getItem("email")
     axios({
         method: 'post',
-        url: 'http://localhost:5000/forget_password_step_2',
-        // url: 'https://forgetpasswordserver.herokuapp.com/login',
+        url: url+'/forget_password_step_2',
+       
         withCredentials: true,
         data: {
             email: email22,
@@ -117,7 +119,7 @@ function forget_password_step_2() {
 function getProfile() {
     axios({
         method: 'get',
-        url: 'http://localhost:5000/profile',
+        url: url+'/profile',
         credentials: 'include',
     }).then((response) => {
         document.getElementById("pName").innerHTML = response.data.profile.name
@@ -129,7 +131,7 @@ function getProfile() {
 function post() {
     axios({
         method: 'post',
-        url: 'http://localhost:5000/tweet',
+        url: url+'/tweet',
         credentials: 'include',
         data: {
             userName: document.getElementById('pName').innerHTML,
@@ -154,7 +156,7 @@ function post() {
 function getTweets() {
     axios({
         method: 'get',
-        url: 'http://localhost:5000/getTweets',
+        url: url+'/getTweets',
         credentials: 'include',
     }).then((response) => {
         console.log(response.data)

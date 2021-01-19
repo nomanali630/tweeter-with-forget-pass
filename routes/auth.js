@@ -5,10 +5,10 @@ var jwt = require('jsonwebtoken');
 var postmark = require("postmark");
 var { SERVER_SECRET } = require("../core/index");
 
-var client = new postmark.Client("6b04597f-44f8-47bc-8f77-ba7597d57781");
+var emailToken = process.env.API_TOKEN
+var client = new postmark.Client(emailToken);
 
-
-var { userModel, otpModel ,tweetModel  } = require("../dbrepo/models");
+var { userModel, otpModel   } = require("../dbrepo/models");
 console.log("userModel: ", userModel);
 
 var api = express.Router();
