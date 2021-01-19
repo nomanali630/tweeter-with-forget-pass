@@ -46,7 +46,6 @@ input:focus {
 
 button {
     display: block;
-    background-image: linear-gradient(to right, #00b300, #5691be, #34a4f9);
     padding: 15px 40px;
     border: none;
     outline: none;
@@ -57,15 +56,12 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background-image: linear-gradient(to right, #34a4f9, #5691be, #00b300);
-    transition: .1s;
-}
 .posts{
     /* border: 1px solid #0062cc; */
     padding: 20px;
     margin: 10px;
-    background-color: #ffffff;
+    color: #ffffff;
+    background-color: #28a745;
     border-radius: 10px;
 }
 #posts {

@@ -21,7 +21,7 @@ mongoose.connection.on('error', function (err) {
     process.exit(1);
 });
 
-process.on('SIGINT', function () { 
+process.on('SIGINT', function () {
     console.log("app is terminating");
     mongoose.connection.close(function () {
         console.log('Mongoose default connection closed');
@@ -50,13 +50,13 @@ var otpSchema = new mongoose.Schema({
 var otpModel = mongoose.model("otps", otpSchema);
 
 var tweetSchema = new mongoose.Schema({
-    "name":String,
-    "tweet":String
+    "name": String,
+    "tweets": String
 });
-var tweetModel = mongoose.model("tweets",tweetSchema);
+var tweetModel = mongoose.model("tweets", tweetSchema);
 
 module.exports = {
     userModel: userModel,
     otpModel: otpModel,
-    tweetModel:tweetModel
+    tweetModel: tweetModel
 }

@@ -23,8 +23,8 @@
 
 </head>
 
-<body onload="getProfile(); getTweets(); getUsers()">
-    <header class="bg-primary sticky-top">
+<body onload="getProfile(); getTweets(); ">
+    <header class="bg-success sticky-top">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -44,15 +44,11 @@
                                     <a class="nav-link text-white" href="#" onclick="showProfile()">Profile <span
                                             class="sr-only">(current)</span></a>
                                 </li>
-                                <li class="nav-item active">
+                                <!-- <li class="nav-item active">
                                     <a class="nav-link text-white" href="#" onclick="showUsers()">Users<span
                                             class="sr-only">(current)</span></a>
-                                </li>
+                                </li> -->
                             </ul>
-                            <form>
-                                <input class="form-control mr-sm-2" type="search" placeholder="Search"
-                                    aria-label="Search" id="searchTxt">
-                            </form>
                             <button class="btn btn-outline-light my- my-sm-0 ml-2" type="button"
                                 onclick="logout()">Logout</button>
                         </div>
@@ -66,7 +62,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h2 class="text-white">Welcome <span id="pName"></span></h2>
+                        <h2 class="text-dark">Welcome <span id="pName"></span></h2>
                     </div>
                 </div>
             </div>
@@ -80,7 +76,7 @@
                                 <input type="text" class="form-control" id="tweet" aria-describedby="emailHelp"
                                     placeholder="Type your post" required>
                             </div>
-                            <button class="btn btn-primary" style="width: 100%">Post</button>
+                            <button class="btn btn-outline-success" style="width: 100%">Post</button>
                         </form>
                     </div>
                 </div>
@@ -107,18 +103,8 @@
             </div>
         </div>
     </section>
-
-    <section class="mt-5" id="usersSection">
-        <div class="container">
-            <h1 class="text-center">Users</h1>
-            <div class="row justify-content-center">
-                <div class="col-md-6 shadow p-3 mb-5 rounded" id="users">
-                </div>
-            </div>
-        </div>
-    </section>
     <script src="client.js"></script>
-    
+
 </body>
 
 </html>

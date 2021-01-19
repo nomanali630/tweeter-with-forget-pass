@@ -1,18 +1,13 @@
 
-
-var socket = io(url)
-socket.on("connect",function(){
+var socket = io("http://localhost:5000")
+socket.on("connect", function () {
     console.log("connected");
 });
-
-
-
-
 function signup() {
-    
+
     axios({
         method: 'post',
-        url: 'http://localhost:3000/signup',
+        url: 'http://localhost:5000/signup',
         // url: 'https://forgetpasswordserver.herokuapp.com/signup',
         data: {
             name: document.getElementById('name').value,
@@ -20,26 +15,26 @@ function signup() {
             password: document.getElementById('password').value,
             phone: document.getElementById('phone').value,
             gender: document.getElementById('gender').value,
-            
+
         },
-        withCredentials:true
+        withCredentials: true
     })
-    .then((response) => {
-        if (response.data.status === 200) {
-            alert(response.data.message)
-            location.href = "./login.html"
-        } else {
-            alert(response.data.message);
-        }
-    }).catch((error) => {
-        console.log(error);
-    });
+        .then((response) => {
+            if (response.data.status === 200) {
+                alert(response.data.message)
+                location.href = "./login.html"
+            } else {
+                alert(response.data.message);
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
     return false;
 }
 function login() {
     axios({
         method: 'post',
-        url: 'http://localhost:3000/login',
+        url: 'http://localhost:5000/login',
         // url: 'https://forgetpasswordserver.herokuapp.com/login',
         withCredentials: true,
         data: {
@@ -60,26 +55,11 @@ function login() {
     });
     return false;
 }
-function getProfile() {
-    axios({
-        method: 'get',
-        url: 'http://localhost:3000/profile',
-        credentials: 'include',
-    }).then((response) => {
-        console.log(response);
-        document.getElementById('pName').innerHTML = response.data.profile.name
-        document.getElementById('pPhone').innerHTML = response.data.profile.phone
-        document.getElementById('pEmail').innerHTML = response.data.profile.email
-    }, (error) => {
-        console.log(error.message);
-        location.href = "./login.html"
-    });
-    return false
-}
+
 function logout() {
     axios({
         method: 'post',
-        url: 'http://localhost:3000/logout',
+        url: 'http://localhost:5000/logout',
     }).then((response) => {
         console.log(response);
         location.href = "./login.html"
@@ -91,15 +71,15 @@ function logout() {
 function forget_password() {
 
     var email = document.getElementById('email12').value
-    localStorage.setItem("email",email)
+    localStorage.setItem("email", email)
 
     axios({
         method: 'post',
-        url: 'http://localhost:3000/forget_password',
+        url: 'http://localhost:5000/forget_password',
         // url: 'https://forgetpasswordserver.herokuapp.com/login',
         withCredentials: true,
         data: {
-         email:email
+            email: email
         }
     }).then((response) => {
         if (response.data.status === 200) {
@@ -117,31 +97,31 @@ function forget_password_step_2() {
     var email22 = localStorage.getItem("email")
     axios({
         method: 'post',
-        url: 'http://localhost:3000/forget_password_step_2',
+        url: 'http://localhost:5000/forget_password_step_2',
         // url: 'https://forgetpasswordserver.herokuapp.com/login',
         withCredentials: true,
         data: {
-            email:email22,
+            email: email22,
             code: document.getElementById('code').value,
             newPass: document.getElementById('newpass').value,
-           }
+        }
     }).then((response) => {
-       console.log(response);
-       alert(response.data)
-       location.href = "./login.html"
+        console.log(response);
+        alert(response.data)
+        location.href = "./login.html"
     }).catch((error) => {
         console.log(error);
     });
     return false;
 }
-function getProfile(){
+function getProfile() {
     axios({
-        method:'get',
-        url:'http://localhost:3000/profile',
-        credentials:'include',
-    }).then((response)=>{
-        document.getElementById("pName").innerHTML=response.data.profile.name
-    },(error)=>{
+        method: 'get',
+        url: 'http://localhost:5000/profile',
+        credentials: 'include',
+    }).then((response) => {
+        document.getElementById("pName").innerHTML = response.data.profile.name
+    }, (error) => {
         location.href = "./login.html"
     });
     return false;
@@ -149,14 +129,14 @@ function getProfile(){
 function post() {
     axios({
         method: 'post',
-        url: 'http://localhost:3000//tweet',
+        url: 'http://localhost:5000/tweet',
         credentials: 'include',
         data: {
             userName: document.getElementById('pName').innerHTML,
             tweet: document.getElementById('tweet').value,
         },
     }).then((response) => {
-        console.log(response.data.data);
+        console.log(response.data);
         document.getElementById('userPosts').innerHTML += `
     <div class="posts">
     <h4>${response.data.data.name}</h4>
@@ -174,62 +154,38 @@ function post() {
 function getTweets() {
     axios({
         method: 'get',
-        url: 'http://localhost:3000/getTweets',
+        url: 'http://localhost:5000/getTweets',
         credentials: 'include',
     }).then((response) => {
-        let tweets = response.data;
+        console.log(response.data)
+        let tweets = response.data.data;
         let html = ""
-        tweets.forEach(element => {
+        for (let i = 0; i < tweets.length; i++) {
             html += `
             <div class="posts">
-            <h4>${element.name}</h4>
-            
-            <p class="noteCard">${element.tweets}</p>
+            <h4>${tweets[i].name}</h4>
+            <p>${tweets[i].tweets}</p>
             </div>
             `
-        });
+        }
         document.getElementById('posts').innerHTML = html;
 
-        let userTweet = response.data
+        let userTweet = response.data.data
         let userHtml = ""
         let userName = document.getElementById('pName').innerHTML;
-        userTweet.forEach(element => {
-            if (element.name == userName) {
+        for (let i = 0; i < userTweet.length; i++) {
+            if (tweets[i].name == userName) {
                 userHtml += `
-                <div class="posts">
-                <h4>${element.name}</h4>
-            
-                <p class="noteCard">${element.tweets}</p>
-                </div>
-                `
+                        <div class="posts">
+                        <h4>${tweets[i].name}</h4>
+                <p>${tweets[i].tweets}</p>
+
+                        </div>
+                        `
             }
-        });
+
+        }
         document.getElementById('userPosts').innerHTML = userHtml;
-    }, (error) => {
-        console.log(error.message);
-    });
-    return false
-}
-
-function getUsers() {
-    axios({
-        method: 'get',
-        url: url + '/getUsers',
-        credentials: 'include',
-    }).then((response) => {
-        let users = response.data;
-        let usersHtml = ""
-        users.forEach(element => {
-            usersHtml += `
-            <div class="posts">
-            <h4>${element.name}</h4>
-            <p>${element.phone}</p>
-            <p class="noteCard">${element.email}</p>
-            </div>
-            `
-        });
-        document.getElementById('users').innerHTML = usersHtml;
-
     }, (error) => {
         console.log(error.message);
     });
