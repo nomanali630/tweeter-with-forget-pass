@@ -5,8 +5,8 @@ var jwt = require('jsonwebtoken');
 var postmark = require("postmark");
 var { SERVER_SECRET } = require("../core/index");
 
-var emailToken = process.env.API_TOKEN
-var client = new postmark.Client(emailToken);
+// var emailToken = process.env.API_TOKEN || "1af8afcb-bbe9-4792-b0e2-c2cc88aa680f";
+var client = new postmark.Client("1af8afcb-bbe9-4792-b0e2-c2cc88aa680f");
 
 var { userModel, otpModel   } = require("../dbrepo/models");
 console.log("userModel: ", userModel);
@@ -196,7 +196,7 @@ api.post("/forget_password", function (req, res, next) {
 });
 
 api.post("/forget_password_step_2", function (req, res, next) {
-    if (!req.body.email && !req.body.otp && !req.body.password) {
+    if (!req.body.email && !req.body.otp && !req.body.newPassword) {
         res.status(403).send(`
         please send the email , otp ans password in json body
         {
@@ -228,15 +228,19 @@ api.post("/forget_password_step_2", function (req, res, next) {
                             const otpIat = new Date(optData.createdOn).getTime();
                             const diff = now - otpIat
                             console.log("diff:", diff)
-
-                            if (optData.optCode === req.body.opt && diff < 300000) {
+                            
+                            if (optData.optCode === req.body.otp && diff < 300000) {
                                 optData.remove();
-
-                                bcrypt.stringToHash(req.body.newPassword).then(function (anonymousPass) {
+                                // console.log("user is===>" , user);
+                                bcrypt.stringToHash(req.body.newPass).then(function (anonymousPass) {
+                                    // console.log("updated paas==> "+req.body.newPass);
                                     user.update({ password: anonymousPass }, {}, function (err, data) {
-                                        res.send("password updated");
-                                    });
-                                });
+                                        // console.log("updated pass =>" , anonymousPass , user.password );
+                                        res.status(200).send({
+                                            message: "password updated",
+                                        });
+                                    })
+                                })
                             } else {
                                 res.status(401).send({
                                     message: "incorrect opt"

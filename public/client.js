@@ -1,5 +1,5 @@
-var url = "https://tweet-with-forget-pass.herokuapp.com"
-// var url = "https://localhost:5000"
+// var url = "https://tweet-with-forget-pass.herokuapp.com"
+var url = "http://localhost:5000"
 var socket = io(url)
 
 socket.on("connect", function () {
@@ -105,7 +105,7 @@ function forget_password_step_2() {
         data: {
             email: email22,
             code: document.getElementById('code').value,
-            newPass: document.getElementById('newpass').value,
+            newPass: document.getElementById('newPassword').value,
         }
     }).then((response) => {
         console.log(response);
